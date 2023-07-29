@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  php-apache:
+    build: .
+    image: php-apache-image
+    ports:
+      - "8080:80"
+    container_name: php-apache
+    hostname: server_on_docker
+    volumes:
+      - /local/path/to/source:/var/www/html
