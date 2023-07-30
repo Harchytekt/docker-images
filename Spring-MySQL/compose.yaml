@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  api_service:
+  spring_api_service:
     build: .
     image: spring-image
     restart: always
