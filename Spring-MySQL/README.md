@@ -23,3 +23,9 @@ Then we define the database name and the user and passwords.
 > For example, mapping the `mysqldb` port `3306` to `3307` will result in:
 > - needing to use the port `3307` from the host;
 > - still using the port `3306` in tha Spring Boot app in `spring_api_service`.
+
+> ℹ️#2 If we want to have different `application.properties`, we can use Spring Boot profiles.  
+> For example, we will keep the default `application.properties` for a "normal" execution, and use `application-docker.properties` for the Docker run.  
+> ⚠️ All properties defined in the default `application.properties` will be used, unless overriden in the 'docker' file.  
+> Now, we have to add this option when executing the `.jar`: `-Dspring.profiles.active=docker`.  
+> In this case, we can add it to the last line of the `Dockerfile`: `ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "/app.jar"]`.
