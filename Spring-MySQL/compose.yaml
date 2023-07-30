@@ -25,3 +25,4 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
 networks:
   spring-mysql-net:
+    driver: bridge
