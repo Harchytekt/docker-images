@@ -1,6 +1,10 @@
 # Use the latest Ubuntu image as the base image
 FROM ubuntu:latest
 
+LABEL version="1.0.0"
+LABEL description="Docker Image with Ubuntu, Apache, PHP and Nano"
+LABEL maintainer="DUCOBU Alexandre"
+
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 
