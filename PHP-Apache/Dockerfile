@@ -1,32 +1,50 @@
-# Use the latest Ubuntu image as the base image
-FROM ubuntu:latest
+FROM php:8.2-apache
 
-LABEL version="1.0.0"
-LABEL description="Docker Image with Ubuntu, Apache, PHP and Nano"
-LABEL maintainer="DUCOBU Alexandre"
+LABEL version="1.1.0"
+LABEL description="Docker Image with PHP 8.2, Apache, MSSQL, LDAP and xDebug"
+LABEL maintainer="Alexandre Ducobu"
 
-# Disable Prompt During Packages Installation
-ARG DEBIAN_FRONTEND=noninteractive
+ENV ACCEPT_EULA=Y
+ENV LOCATION=DOCKER
 
-# Install Apache, PHP and nano
+# Install prerequisites required for tools and extensions installed later on.
 RUN apt-get update && \
-    apt-get install -y apache2 php libapache2-mod-php nano && \
-    apt-get clean && \
+    apt-get install -y apt-transport-https gnupg2 libpng-dev libzip-dev nano unzip && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy the custom Apache configuration file and enable it
-COPY custom_servername.conf /etc/apache2/conf-available/
-RUN a2enconf custom_servername
+# Install prerequisites for the sqlsrv and pdo_sqlsrv PHP extensions.
+# Use Ubuntu because issues with Debian
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    apt-get install -y msodbcsql17 mssql-tools unixodbc-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Enable necessary Apache modules (if any)
-# For example, to enable mod_rewrite:
+# Retrieve the script used to install PHP extensions from the source container.
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
+
+# Install required PHP extensions and all their prerequisites available via apt.
+RUN chmod uga+x /usr/bin/install-php-extensions && \
+    sync && \
+    install-php-extensions bcmath exif gd imagick intl ldap opcache pcntl pcov pdo_sqlsrv redis sqlsrv xdebug zip
+
+# Activate .htaccess rewrite
 RUN a2enmod rewrite
 
-# Expose port 80 to the outside world
-EXPOSE 80
+# Create PHP log file if doesn't exist yet
+RUN touch /var/log/php-errors.log && \
+    chown www-data:www-data /var/log/php-errors.log
+
+# Copy PHP settings
+COPY docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
+COPY docker-php-ext-logging.ini /usr/local/etc/php/conf.d/
+
+# Add Composer
+# COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
 # Setting the work directory.
 WORKDIR /var/www/html
 
-# Start Apache in the foreground when the container runs
-CMD ["apachectl", "-D", "FOREGROUND"]
+# build: docker build -t "my-php-app-image:1.1.0" .
+# run: docker run --name container-name -d -v /local/path/to/source:/var/www/html -p 8080:80 -p 1433:1433 my-php-app-image:1.1.0
+# accessible through http://localhost:8080

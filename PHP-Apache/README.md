@@ -1,13 +1,8 @@
 # PHP-Apache
 
 ## Image (`Dockerfile`)
-This image is based on the latest Ubuntu image (`ubuntu:latest`).  
-We install Apache, PHP (_and nano_).
-
-In order to avoid the `apache2: Could not reliably determine the server's fully qualified domain name` error, 
-we will set a custom servername (`ServerName localhost`).  
-Here, we create a `custom_servername.conf` that we will copy in `/etc/apache2/conf-available/`.  
-For it to be active, we then execute `RUN a2enconf custom_servername`.
+This image is based on the latest PHP-Apache image for PHP 8.2 (`php:8.2-apache`).  
+We install some tools, like xDebug, nano…
 
 We can enable any necessary Apache module.  
 For example, we enable `mod_rewrite`.

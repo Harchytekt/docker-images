@@ -1,12 +1,14 @@
-version: '3'
-
 services:
-  php-apache:
+  php-apache-sid:
     build: .
-    image: php-apache-image
+    image: my-php-app-image:1.1.0
     ports:
       - "8080:80"
-    container_name: php-apache
-    hostname: server_on_docker
+      - "1433:1433"
+    container_name: container-name
     volumes:
       - /local/path/to/source:/var/www/html
+      - /local/path/to/logs:/var/www/html/Logs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      #host.docker.internal:127.0.0.1 for linux
