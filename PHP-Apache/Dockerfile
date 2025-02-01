@@ -46,6 +46,6 @@ COPY docker-php-ext-logging.ini /usr/local/etc/php/conf.d/
 # Setting the work directory.
 WORKDIR /var/www/html
 
-# build: docker build -t "my-php-app-image:1.1.0" .
-# run: docker run --name container-name -d -v /local/path/to/source:/var/www/html -p 8080:80 -p 1433:1433 my-php-app-image:1.1.0
+# build: docker build -t "my-php-app-image:1.2.0" .
+# run: docker run --name container-name -d -v /local/path/to/source:/var/www/html -p 8080:80 -p 1433:1433 my-php-app-image:1.2.0
 # accessible through http://localhost:8080
