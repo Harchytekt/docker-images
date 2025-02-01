@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-LABEL version="1.1.0"
+LABEL version="1.2.0"
 LABEL description="Docker Image with PHP 8.2, Apache, MSSQL, LDAP and xDebug"
 LABEL maintainer="Alexandre Ducobu"
 
@@ -17,7 +17,7 @@ RUN apt-get update && \
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
-    apt-get install -y msodbcsql17 mssql-tools unixodbc-dev && \
+    apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Retrieve the script used to install PHP extensions from the source container.
@@ -31,16 +31,17 @@ RUN chmod uga+x /usr/bin/install-php-extensions && \
 # Activate .htaccess rewrite
 RUN a2enmod rewrite
 
+# Avoid 'apache2: Could not reliably determine the server's fully qualified domain name, using 10.89.3.2. Set the 'ServerName' directive globally to suppress this message'
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Create PHP log file if doesn't exist yet
 RUN touch /var/log/php-errors.log && \
     chown www-data:www-data /var/log/php-errors.log
 
 # Copy PHP settings
+COPY docker-php-ext-ini.ini /usr/local/etc/php/conf.d/
 COPY docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
 COPY docker-php-ext-logging.ini /usr/local/etc/php/conf.d/
-
-# Add Composer
-# COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
 # Setting the work directory.
 WORKDIR /var/www/html
