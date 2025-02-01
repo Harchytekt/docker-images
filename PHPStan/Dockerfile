@@ -1,4 +1,6 @@
-FROM ghcr.io/phpstan/phpstan:latest
+FROM ghcr.io/phpstan/phpstan:latest-php8.2
 
-# Needed to avoid errors for PhpStorm attributes
-RUN composer global require jetbrains/phpstorm-attributes
+RUN composer global config --no-plugins allow-plugins.phpstan/extension-installer true && \
+    composer global require phpstan/extension-installer && \
+    composer global require jetbrains/phpstorm-attributes && \
+    composer global require phpstan/phpstan-deprecation-rules
