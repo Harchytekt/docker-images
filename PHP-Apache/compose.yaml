@@ -1,11 +1,14 @@
 services:
-    php-apache-sid:
-        build: .
-        image: si-php-dev:2.0.0
-        ports:
-            - "8080:80"
-            - "1433:1433"
-        container_name: sid
-        volumes:
-            - /Users/alexandre/Sites/docker-test/src:/var/www/html
-            - /Users/alexandre/Sites/docker-test/logs:/var/www/html/Logs
+  php-apache-sid:
+    build: .
+    image: si-php-dev:2.0.0
+    ports:
+      - "8080:80"
+      - "1433:1433"
+    container_name: sid
+    volumes:
+      - /Users/alexandre/Sites/docker-test/src:/var/www/html
+      - /Users/alexandre/Sites/docker-test/logs:/var/www/html/Logs
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+        #host.docker.internal:127.0.0.1 for linux
