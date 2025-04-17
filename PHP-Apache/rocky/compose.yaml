@@ -1,0 +1,14 @@
+services:
+  php-apache:
+    build: .
+    image: my-php-rocky-app-image:1.0.0
+    ports:
+      - "8080:80"
+      - "1433:1433"
+    container_name: container-name
+    volumes:
+      - /local/path/to/source:/var/www/html
+      - /local/path/to/logs:/var/www/html/Logs
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Needed for the debugger
+      #host.docker.internal:127.0.0.1 for linux
