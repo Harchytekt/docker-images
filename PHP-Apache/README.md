@@ -51,19 +51,32 @@ For PHP-FPM (Rocky), they are active by default and available at `/var/log/php-f
 
 ## For PHP-FPM (Rocky Linux)
 
+### entrypoint.sh
+
+From time to time (_on Windows_), the container cannot start with this error in the logs: `exec /entrypoint.sh: no such file or directory`.
+
+It appears that, being created on Windows, the line endings character is wrong.  
+To fix it, we only have to execute:
+
+```shell
+dos2unix entrypoint.sh
+```
+
+### Timeouts
+
 We have a lot of timeout issues.  
 For example, debugging will finish with a timeout error if it takes too long (_maybe 1 minute_)...
 
 After some changes, we now have the timeout set to 10 minutes (_on Debian, it seems no timeout is set_).
 
-### What was changed to make it work?
+#### What was changed to make it work?
 
 All changes were done without any positive result.  
 After updating `php.conf`, we even got a `Service Unavailable` error...
 
 Then, setting `listen = 127.0.0.1:9000` fixed everything.
 
-#### www.conf
+##### www.conf
 
 We had to add a custom `/etc/php-fpm.d/www.conf` containing these changes:
 
@@ -71,7 +84,7 @@ We had to add a custom `/etc/php-fpm.d/www.conf` containing these changes:
 2. `listen = 127.0.0.1:9000` instead of the default `listen = /run/php-fpm/www.sock`
 3. make sure we had `listen.allowed_clients = 127.0.0.1` (_default value_)
 
-#### php.conf
+##### php.conf
 
 We also had to use a custom `/etc/httpd/conf.d/php.conf` which makes the link between PHP-FPM and Apache.
 
