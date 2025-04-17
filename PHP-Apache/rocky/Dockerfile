@@ -35,6 +35,7 @@ RUN mkdir /run/php-fpm &&  \
 
 # Copy PHP settings (for php.ini)
 COPY resources/docker-php-ext-ini.ini /etc/php.d/
+COPY resources/docker-php-ext-logging.ini /etc/php.d/
 COPY resources/docker-php-ext-xdebug.ini /etc/php.d/
 
 # Overwrite PHP-Apache settings

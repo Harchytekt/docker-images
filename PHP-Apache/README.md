@@ -47,7 +47,7 @@ To stop it, the command is `docker-compose down`.
 
 For Debian, there are no error logs by default, so we had to create `/var/log/php-errors.log`, and activate them via `php.ini`.
 
-For PHP-FPM (Rocky), they are active by default and available at `/var/log/php-fpm/www-error.log`.
+For PHP-FPM (Rocky), the default path is `/var/log/php-fpm/www-error.log`, so it is not needed in the `.ini` file.
 
 ## For PHP-FPM (Rocky Linux)
 
