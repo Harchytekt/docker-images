@@ -39,9 +39,9 @@ RUN touch /var/log/php-errors.log && \
     chown www-data:www-data /var/log/php-errors.log
 
 # Copy PHP settings (for php.ini)
-COPY docker-php-ext-ini.ini /usr/local/etc/php/conf.d/
-COPY docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
-COPY docker-php-ext-logging.ini /usr/local/etc/php/conf.d/
+COPY resources/docker-php-ext-ini.ini /usr/local/etc/php/conf.d/
+COPY resources/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
+COPY resources/docker-php-ext-logging.ini /usr/local/etc/php/conf.d/
 
 # Setting the work directory.
 WORKDIR /var/www/html

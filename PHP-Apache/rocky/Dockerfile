@@ -34,14 +34,14 @@ RUN mkdir /run/php-fpm &&  \
     echo "clear_env = no" >> /etc/php-fpm.conf
 
 # Copy PHP settings (for php.ini)
-COPY docker-php-ext-ini.ini /etc/php.d/
-COPY docker-php-ext-xdebug.ini /etc/php.d/
+COPY resources/docker-php-ext-ini.ini /etc/php.d/
+COPY resources/docker-php-ext-xdebug.ini /etc/php.d/
 
 # Overwrite PHP-Apache settings
-COPY php.conf /etc/httpd/conf.d/php.conf
+COPY resources/php.conf /etc/httpd/conf.d/php.conf
 
 # Overwrite PHP-FPM settings
-COPY www.conf /etc/php-fpm.d/www.conf
+COPY resources/www.conf /etc/php-fpm.d/www.conf
 
 # Set permissions
 RUN chown -R apache:apache /var/www/html
@@ -50,7 +50,7 @@ RUN chown -R apache:apache /var/www/html
 RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
 
 # Copy entrypoint script (needed to start PHP and httpd)
-COPY entrypoint.sh /entrypoint.sh
+COPY resources/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set user (commented because we have some access issues when using it, and because it's only for development)
