@@ -120,7 +120,7 @@ We've put the `AllowOverride` to `All`:
     # http://httpd.apache.org/docs/2.4/mod/core.html#options
     # for more information.
     #
-    Options Indexes FollowSymLinks
+    Options FollowSymLinks
 
     #
     # AllowOverride controls what directives may be placed in .htaccess files.
