@@ -98,3 +98,46 @@ We've added these lines at the end of the file, to set the timeout to 10 minutes
 ProxyTimeout 600
 Timeout 600
 ```
+
+##### httpd.conf
+
+To have the root folder of the SID following the `.htaccess`, we had to update (_and override_) `/etc/httpd/conf/httpd.conf` which also make the link between PHP-FPM and Apache.
+
+We've put the `AllowOverride` to `All`:
+
+```
+# Further relax access to the default document root:
+<Directory "/var/www/html">
+    #
+    # Possible values for the Options directive are "None", "All",
+    # or any combination of:
+    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+    #
+    # Note that "MultiViews" must be named *explicitly* --- "Options All"
+    # doesn't give it to you.
+    #
+    # The Options directive is both complicated and important.  Please see
+    # http://httpd.apache.org/docs/2.4/mod/core.html#options
+    # for more information.
+    #
+    Options Indexes FollowSymLinks
+
+    #
+    # AllowOverride controls what directives may be placed in .htaccess files.
+    # It can be "All", "None", or any combination of the keywords:
+    #   Options FileInfo AuthConfig Limit
+    #
+    AllowOverride All
+
+    #
+    # Controls who can get stuff from this server.
+    #
+    Require all granted
+</Directory>
+```
+
+Also, to avoid `apache2: Could not reliably determine the server's fully qualifies domain name`, we have set the `ServerName` directive globally:
+
+```
+ServerName localhost
+```

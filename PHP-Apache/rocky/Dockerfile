@@ -39,6 +39,9 @@ COPY resources/docker-php-ext-logging.ini /etc/php.d/
 COPY resources/docker-php-ext-xdebug.ini /etc/php.d/
 
 # Overwrite PHP-Apache settings
+## Set AllowOverride and ServerNane
+COPY resources/httpd.conf /etc/httpd/conf/httpd.conf
+## Set timeout and proxy
 COPY resources/php.conf /etc/httpd/conf.d/php.conf
 
 # Overwrite PHP-FPM settings
@@ -46,9 +49,6 @@ COPY resources/www.conf /etc/php-fpm.d/www.conf
 
 # Set permissions
 RUN chown -R apache:apache /var/www/html
-
-# Avoid 'apache2: Could not reliably determine the server's fully qualified domain name, using 10.89.3.2. Set the 'ServerName' directive globally to suppress this message'
-RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
 
 # Copy entrypoint script (needed to start PHP and httpd)
 COPY resources/entrypoint.sh /entrypoint.sh
